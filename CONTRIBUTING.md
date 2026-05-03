@@ -11,8 +11,12 @@ Each skill lives in its own subdirectory under `skills/`:
 ```
 skills/
 └── your-skill-name/
-    └── SKILL.md
+    ├── SKILL.md
+    └── assets/
+        └── appendix.md
 ```
+
+Use `SKILL.md` as the concise entrypoint. Put long language-, framework-, or workflow-specific details into optional companion Markdown files under `assets/` only when they materially reduce prompt bloat.
 
 Run the following command to scaffold a new skill:
 
@@ -29,6 +33,8 @@ mkdir -p skills/your-skill-name
 ### 2. Write the SKILL.md file
 
 Every skill requires a `SKILL.md` file with YAML frontmatter and Markdown content.
+
+Keep the top-level skill concise. If detailed sub-guides are necessary, link them from `SKILL.md` and store them under `assets/` instead of expanding the entry file indefinitely.
 
 **Frontmatter fields:**
 
@@ -80,9 +86,9 @@ Step-by-step instructions for the agent to follow.
 Provide examples to clarify the expected behavior.
 ```
 
-### 3. Review the example skill
+### 3. Review existing skills
 
-See [`skills/example-skill/SKILL.md`](skills/example-skill/SKILL.md) for a complete example of the skill format.
+See [`skills/clean-code/SKILL.md`](skills/clean-code/SKILL.md) for a real skill that keeps `SKILL.md` focused and moves language-specific detail into `assets/` companion docs.
 
 ### 4. Open a Pull Request
 

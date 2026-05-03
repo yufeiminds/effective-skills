@@ -23,7 +23,7 @@ Supports [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [Co
 
 | Skill | Description |
 |-------|-------------|
-| [example-skill](skills/example-skill/SKILL.md) | A placeholder demonstrating the skill format — replace with a real skill |
+| [clean-code](skills/clean-code/SKILL.md) | A concise refactoring skill for shrinking public APIs, building deeper modules, and cleaning structure across Rust, TypeScript, and MoonBit |
 
 ## Contributing
 
