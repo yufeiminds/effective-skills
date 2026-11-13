@@ -1,91 +1,91 @@
-# Key Takeaways from *A Philosophy of Software Design*
+# Key Takeaways from "A Philosophy of Software Design"
 
-The center of this book is not code style, but a more upstream question: how do you make a system easier to understand and change? Ousterhout treats almost every design judgment as a question of whether complexity goes down.
+The book's center of gravity is not code style but a more upstream question: how to make a system easier to understand and change. Ousterhout collapses nearly every judgment of design quality into one question: did complexity go down?
 
-## Core Claims
+## Key Claims
 
-- The first goal of good design is to reduce complexity, not to add more structural terminology.
-- Complexity is not “there is a lot of code”; it is “future readers must keep too much in mind at once.”
-- Design should reduce cognitive burden for readers, not merely make local code look tidy.
+- The first goal of good design is reducing complexity, not adding structural nouns.
+- Complexity is not "a lot of code"; it is too much that those who come later must know at once.
+- Design should prioritize reducing the reader's cognitive load, not merely making local code look tidy.
 
-## Three Direct Symptoms of Complexity
+## The Three Telltale Symptoms of Complexity
 
 - Change amplification: one requirement change forces edits in many places.
-- Cognitive load: to change one place, you must hold too much prerequisite knowledge in your head.
-- Unknown unknowns: you do not even know where else the critical facts might be.
+- Cognitive load: changing one piece of code requires holding too much prerequisite knowledge in your head at once.
+- Unknown unknowns: you do not even know where you still need to look for the key facts.
 
-## Main Sources of Complexity
+## The Main Sources of Complexity
 
-- Too many dependencies: one change pulls in many modules.
-- Information leakage: callers must understand knowledge that should have stayed inside a module.
-- Inconsistency: similar concepts are expressed with different rules, names, or error semantics in different places.
+- Too many dependencies: one change drags many modules along.
+- Information leakage: knowledge that should be encapsulated inside a module is forced onto its callers to understand.
+- Inconsistency: similar concepts expressed with different rules, different names, and different error semantics in different places.
 
 ## Key Content
 
-### 1. Deep modules are the central structural test
+### 1. Deep Module is the core structural criterion
 
-- A good module should hide a lot of implementation complexity behind a small interface.
-- If extracting a module only adds one more name and one more forwarding layer, it is shallow.
-- Do not judge a split by file count; judge it by whether callers truly need to know less.
+- A good module should hide substantial implementation complexity behind a small interface.
+- If extracting a module merely adds a layer of names and forwarding, it is a shallow module.
+- Judge a split's success not by file count but by whether callers genuinely need to know less.
 
 ### 2. Push complexity downward, not upward
 
-- Callers should depend on stable interfaces, not on internal flows, sequencing, or directory layout.
-- Pass-through methods, mirror APIs, and layers that only forward calls often spread complexity outward instead of containing it.
-- A strong abstraction lets users remember the interface without remembering the internal details.
+- Callers should depend on stable interfaces, not have to understand internal flows, timing, or directory structure.
+- Pass-through methods, mirror APIs, and layers that only forward without abstracting usually keep spreading complexity outward.
+- A truly good abstraction lets users remember only the interface, without having to remember internal details.
 
-### 3. General-purpose mechanisms are often deeper than specialized ones
+### 3. General-purpose mechanisms are usually deeper than specialized ones
 
-- Modules overfitted to the current scenario often have narrow interfaces and short lifespans.
-- If one mechanism covers a broader class of problems while keeping the interface simple, it is often deeper than a temporary specialized assembly.
-- The second edition emphasizes this more strongly, especially with “General-Purpose Modules are Deeper.”
+- Modules over-tuned to the current scenario tend to have narrow interfaces and short lifespans.
+- If a mechanism covers a broader class of problems while keeping a simple interface, it is usually deeper than an ad-hoc specialized solution.
+- The second edition strengthens this point, expanding "General-Purpose Modules are Deeper" as a highlighted topic.
 
 ### 4. Do not over-split related logic
 
-- Splitting is only successful when the interface becomes simpler than the original code.
-- If two functions must still be read together, remembered together, and reasoned about together, they are entangled, and splitting them can make the design harder to understand.
-- More functions do not automatically mean better design; often tightly related logic is clearer when kept together.
+- A split is only justified when the interface is simpler than the original code.
+- If two functions must be read by jumping back and forth, memorized together, and reasoned about together, they are entangled — splitting them apart makes them harder to understand.
+- So "more functions" does not automatically mean "better design"; often keeping related logic together is clearer.
 
 ### 5. Comments are a design tool, not just a patch
 
-- Interface comments define the contract so callers know what they can rely on.
-- Implementation comments capture key facts, design intent, and counterintuitive constraints that are not obvious from the code alone.
-- Data-structure comments explain field meaning, lifecycle, and invariants.
-- The book's stance is not “more comments is always better,” but rather “missing critical comments directly increases complexity.”
+- Interface comments define the contract, telling callers what they may depend on.
+- Implementation comments capture key facts not obvious from the code itself, design intent, and counterintuitive constraints.
+- Data structure comments explain field meanings, lifetimes, and invariants.
+- The book's stance is not "the more comments the better" but "missing key comments directly increase complexity."
 
-### 6. Reduce complexity by eliminating special cases
+### 6. Reduce complexity by defining special cases out of existence
 
-- Special branches, exception protocols, and patchwork fixes quickly increase cognitive cost.
-- One important strategy is to “define errors out of existence” by redesigning interfaces, data models, or flows so special handling becomes unnecessary.
-- Good design often looks like this: callers never even need to know that a certain category of exception once existed.
+- Special branches, exception protocols, and piecemeal patches rapidly amplify cognitive cost.
+- One important strategy is "define errors out of existence": redesign the interface, data model, or flow so that situations that once needed special handling become ordinary paths.
+- Good design often shows up as: callers never need to know a class of exceptional detail ever existed.
 
 ### 7. Design requires strategic thinking, not purely tactical progress
 
-- Tactical programming focuses on “finish the immediate change.” Strategic programming spends more time thinking about long-term complexity.
-- Design is not something you clean up after the code is written; it starts before implementation, when you decide boundaries, interfaces, dependencies, and information hiding.
-- The second edition adds “Decide What Matters,” emphasizing that you must first identify the factors that truly drive complexity and then focus effort there.
+- Tactical programming focuses on "get the immediate change done first"; Strategic programming invests more time thinking about long-term complexity.
+- Design is not cleanup after the code is written; it means considering boundaries, interfaces, dependencies, and information hiding before writing.
+- The second edition adds "Decide What Matters," stressing that you must first identify the factors that truly drive complexity, then focus your firepower on them.
 
-### 8. Consistency is itself a way to reduce complexity
+### 8. Consistency is itself a complexity-reduction tool
 
-- Consistent naming, error semantics, interface style, and structural conventions reduce the cost of switching context.
-- Inconsistency creates extra decisions: does the same kind of thing follow a different rule here again?
+- Consistent naming, error semantics, interface style, and structural conventions lower the reader's context-switching cost.
+- Inconsistency creates extra judgment: is this the same thing, but with yet another set of rules here?
 
-## Best Questions to Take Away from the Book
+## The Most Valuable Questions to Take Away
 
-- After this split, do callers truly need to know less, or did they only meet more files?
-- Does this interface hide complexity, or only rename it and expose it again?
-- Why does one requirement change touch so many places? Has change amplification already appeared?
-- Is this code hard to read because the logic is inherently complex, or because critical information is scattered too widely?
-- Do we need another layer here, or should tightly coupled logic be pulled back together?
+- After this split, do callers genuinely need to know less, or have they merely been introduced to a few more files?
+- Does this interface hide complexity, or expose it in a new disguise?
+- When one requirement changes, why do so many places need edits? Has change amplification already set in?
+- Is this code hard to read because the logic is inherently complex, or because key information is scattered across too many places?
+- Does this need one more layer of splitting, or should the tightly coupled logic be pulled back together?
 
-## Public Disagreements with *Clean Code*
+## The Public Points of Disagreement with "Clean Code"
 
-- It is more cautious about turning “small functions” into mechanical over-splitting.
-- It places more weight on interface and implementation comments as tools for reducing complexity.
-- It leans more toward making design judgments first and then implementing, rather than over-tacticalizing the development process.
+- It is warier of "small functions" being mechanically executed into over-splitting.
+- It places more emphasis on the role of interface comments and implementation comments in reducing complexity.
+- It prefers making design judgments first and then implementing, rather than over-tacticalizing the development process.
 
 ## Public Sources
 
-- The book page and second-edition notes on John Ousterhout's website
-- The author's publications and course/design pages
-- The public `johnousterhout/aposd-vs-clean-code` discussion repository
+- The book page and second-edition notes on John Ousterhout's author homepage
+- Publications and course/design-related pages on the author's homepage
+- The `johnousterhout/aposd-vs-clean-code` public discussion repository
