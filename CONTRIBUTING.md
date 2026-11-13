@@ -88,7 +88,7 @@ Provide examples to clarify the expected behavior.
 
 ### 3. Review existing skills
 
-See [`skills/clean-code/SKILL.md`](skills/clean-code/SKILL.md) for a real skill that keeps `SKILL.md` focused and moves language-specific detail into `assets/` companion docs.
+See [`skills/clean-code/SKILL.md`](skills/clean-code/SKILL.md) for a real skill that keeps `SKILL.md` focused on universal principles and moves deeper background into `references/` companion docs. For guidance on authoring and iterating skills themselves, see [`skills/create-skill/SKILL.md`](skills/create-skill/SKILL.md).
 
 ### 4. Open a Pull Request
 
@@ -112,6 +112,42 @@ See [`skills/clean-code/SKILL.md`](skills/clean-code/SKILL.md) for a real skill 
 - **Keep it focused**: Each skill should do one thing well; split complex skills into multiple focused ones
 - **Test your skill**: Try installing it locally and verify the agent behaves as expected
 
+## Testing Your Skill
+
+- Try the skill on 2–3 realistic prompts locally before opening a PR — see [`skills/create-skill/SKILL.md`](skills/create-skill/SKILL.md) for the full authoring loop.
+- Optional per-skill evals live under `skills/<skill-name>/evals/evals.json`:
+
+```json
+{
+  "skill_name": "your-skill-name",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "A realistic task prompt",
+      "expected_output": "What a good result looks like",
+      "files": []
+    }
+  ]
+}
+```
+
+Evals are optional; keep them language- and project-agnostic, like the skill itself.
+
+## Versioning
+
+Bump `metadata.version` (semver) whenever you change an existing skill: patch for wording fixes, minor for new guidance, major for behavior changes. Record notable changes in [CHANGELOG.md](CHANGELOG.md).
+
+## Release Checklist
+
+Before opening a PR, make sure:
+
+- [ ] `python3 scripts/validate_skills.py` passes (also run in CI)
+- [ ] `name` matches the directory, and the skill is listed in README's Available Skills table
+- [ ] `metadata.version` is bumped if the skill already existed
+- [ ] The README description matches the skill's actual scope
+- [ ] Content is in English and project-agnostic (no repo-specific paths or tooling)
+- [ ] `npx skills add . --list` discovers the skill
+
 ## Installing Skills Locally
 
 To test skills from this repository:
@@ -130,3 +166,7 @@ npx skills add https://github.com/yufeiminds/effective-skills --list
 ## Questions?
 
 Open an issue if you have questions about creating or contributing skills.
+
+## Vendored Development Tooling
+
+This repository carries a local copy of Anthropic's `skill-creator` under [`tooling/skill-creator/`](tooling/skill-creator) (Apache-2.0, see its `LICENSE.txt`). It is development tooling used to author and evaluate the skills in this collection — it is **not** part of the published skill set and is not installed by `npx skills add`.

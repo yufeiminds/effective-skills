@@ -23,8 +23,14 @@ Supports [Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), [Co
 
 | Skill | Description |
 |-------|-------------|
-| [clean-code](skills/clean-code/SKILL.md) | A concise refactoring skill for shrinking public APIs, building deeper modules, and cleaning structure across Rust, TypeScript, and MoonBit |
+| [clean-code](skills/clean-code/SKILL.md) | A concise, language-agnostic refactoring skill for shrinking public APIs, building deeper modules, and cleaning structure |
+| [create-skill](skills/create-skill/SKILL.md) | A skill-authoring workflow for capturing intent, drafting SKILL.md with progressive disclosure, and iterating via realistic test prompts |
+| [docs-engineering](skills/docs-engineering/SKILL.md) | A Diátaxis-based documentation methodology for deciding where content belongs, writing per-quadrant rules, and organizing docs sites |
 
 ## Contributing
 
 Want to add a new skill? See [CONTRIBUTING.md](CONTRIBUTING.md) for a step-by-step guide on how to create and submit skills to this repository.
+
+## License
+
+[MIT](LICENSE) © Yufei Li. Vendored development tooling under `tooling/` keeps its own license (Apache-2.0).
