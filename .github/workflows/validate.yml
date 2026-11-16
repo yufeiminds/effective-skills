@@ -1,0 +1,25 @@
+name: Validate Skills
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install toolchains (mise)
+        uses: jdx/mise-action@v2
+
+      - name: Test validator
+        working-directory: cli
+        run: go test ./...
+
+      - name: Validate skill structure
+        run: go -C cli run . validate
+
+      - name: Smoke test skill discovery (read-only)
+        run: npx -y skills add . --list

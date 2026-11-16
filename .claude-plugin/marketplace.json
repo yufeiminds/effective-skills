@@ -1,0 +1,19 @@
+{
+  "name": "yufeiminds-skills",
+  "owner": {
+    "name": "Yufei Li",
+    "url": "https://github.com/yufeiminds"
+  },
+  "metadata": {
+    "description": "effective-skills: reusable agent skills by yufeiminds"
+  },
+  "plugins": [
+    {
+      "name": "effective-skills",
+      "description": "Curated agent skills: language-agnostic refactoring (clean-code) and Diataxis-based documentation methodology (diataxis)",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/clean-code", "./skills/diataxis"]
+    }
+  ]
+}

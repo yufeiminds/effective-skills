@@ -1,0 +1,7 @@
+# External toolchains for effective-skills, pinned for contributors and CI.
+# CI installs these via jdx/mise-action from this same file, so local and CI
+# toolchains stay identical.
+[tools]
+go = "1.27.4"   # mirrors the go directive in cli/go.mod (cli/ validator)
+node = "24"     # `skills` CLI (installation, smoke tests)
+python = "3.13" # skill-creator eval tooling (development dependency)
