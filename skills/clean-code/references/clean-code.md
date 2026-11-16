@@ -1,79 +1,79 @@
-# Key Takeaways from *Clean Code*
+# Key Takeaways from "Clean Code"
 
-The core message of this book is not “make code look pretty.” It is: write code so future maintainers can understand it quickly, change it confidently, and keep improving it over time.
+The book's central claim is not "make the code pretty," but this: write code so that those who come later can read it quickly, dare to modify it, and keep cleaning it up.
 
-## Core Claims
+## Key Claims
 
-- Readability matters more than the author's writing convenience; code is primarily for future maintainers.
-- The biggest cost of bad code is not that it looks ugly, but that every change becomes slower and riskier.
-- Refactoring is not an extra activity; it is part of everyday development, and bad smells should be cleaned up continuously.
+- Readability outranks the author's writing convenience; code is written primarily for its future maintainers to read.
+- The most expensive cost of bad code is not ugliness but that every change becomes slower and riskier.
+- Refactoring is not an extra activity but part of everyday development; when you see a smell, clean it up as you go.
 
 ## Key Content
 
-### 1. Naming is not decoration; it is the primary way code communicates
+### 1. Naming is not decoration — it is the primary means of expression
 
-- Names should express intent directly and reduce the reader's inference cost.
-- Avoid low-information words, obscure abbreviations, type noise, and misleading names.
-- If context already provides meaning, do not repeat parent-level meaning in local names.
-- Good names make call sites read close to natural language instead of forcing readers to inspect implementation to guess intent.
+- Names must convey intent directly, reducing what readers have to infer.
+- Avoid uninformative words, obscure abbreviations, type noise, and misleading names.
+- If the context already provides the semantics, do not repeat the parent's semantics in a local name.
+- Good naming should make call sites read close to sentences, not force readers to dig into implementations to guess meaning.
 
-### 2. Functions should keep one intent and one abstraction level
+### 2. Functions should keep a single intent and a uniform level of abstraction
 
-- A function should revolve around one intent instead of mixing business orchestration, state updates, validation, and low-level details.
-- Fewer parameters are better; boolean flags, output parameters, and hidden sequencing constraints are warning signs.
-- Side effects must be explicit. A name must not look like a query when it actually mutates state.
-- The book strongly prefers small functions so control flow reads like a narrative, not because it advocates mechanical fragmentation.
+- A function should revolve around a single intent; do not mix business orchestration, state updates, validation, and low-level details.
+- The fewer arguments the better; boolean arguments, output arguments, and hidden temporal coupling are all risk signals.
+- Side effects must be explicit — never let a name read like a query while the behavior mutates.
+- The book strongly prefers small functions, with the goal of making control flow read like narrative — not to encourage mechanical fragmentation.
 
-### 3. Comments are not the default interpreter
+### 3. Comments are not the default explainer
 
-- First try to express intent through naming, structure, and abstraction.
-- Comments are mainly for information code cannot express naturally: design intent, contracts, warnings, edge cases, and historical baggage.
-- Redundant, stale, or code-translating comments create noise.
-- Overall, the book is restrained about comments: improve the code first, then decide whether comments are still needed.
+- The first-choice approach is to let naming, structure, and the abstractions themselves express intent.
+- Comments are mainly for information the code cannot naturally express: design intent, contracts, warnings, boundary conditions, historical baggage.
+- Noise comments, stale comments, and comments that duplicate the code create extra noise.
+- The book is overall restrained about comments, preferring to fix the code first and only then decide whether a comment is needed.
 
-### 4. Error handling must stay separate from the main flow
+### 4. Error handling must be separated from the main flow
 
-- Error paths should not drown out the primary logic.
-- The book prefers exceptions or clearer error semantics instead of vague error codes spread everywhere.
-- Error messages should be diagnosable, but business code should not collapse into layers of defensive branching.
-- Boundary checks, null handling, and exception semantics are design concerns, not “details to add later.”
+- Error paths must not drown the main logic.
+- Prefer exceptions or clearer error semantics over propagating vague error codes everywhere.
+- Error messages must be diagnosable, but do not turn business code into layers of defensive branching.
+- Boundary checks, null handling, and exception semantics belong to design — not details "patched in at the end."
 
 ### 5. Classes and modules should be organized by reason to change
 
-- Classes should stay cohesive instead of mixing independent change reasons into one structure.
-- Separate behavior-rich objects from passive data structures; do not blur interfaces and implementations together.
-- Duplicate logic should converge into a single source of truth so knowledge is not scattered across many change points.
-- The point of module structure is to reduce how much the reader must understand at the same time.
+- Classes should be highly cohesive; do not cram independently changing reasons into one structure.
+- Distinguish objects that have behavior from structures that only carry data; keep interface and implementation from polluting each other.
+- Converge duplicated logic into a single source of truth, so knowledge does not scatter and force multi-site synchronization on every change.
+- The goal of module organization is to reduce what a reader must understand at once.
 
-### 6. Tests are the safety net for refactoring
+### 6. Tests are the refactoring safety net
 
-- The first value of tests is that they support continuous cleanup, not just acceptance checks.
-- The book emphasizes the F.I.R.S.T. test properties: fast, independent, repeatable, self-validating, and timely.
-- TDD is treated as part of clean-code practice because it forces design to evolve in small verifiable steps.
-- Without reliable tests, many “we should refactor this” conversations eventually collapse into “we don't dare touch it.”
+- The value of tests lies first in supporting continuous cleanup, not merely acceptance.
+- The book stresses the F.I.R.S.T. test properties: Fast, Independent, Repeatable, Self-validating, Timely.
+- TDD is placed inside clean-code practice because it forces design to evolve in verifiable small steps.
+- Without reliable tests, much "I want to refactor" eventually degrades into "I dare not touch it."
 
-### 7. Continuous cleanup is more realistic than one big rewrite
+### 7. Continuous cleanup is more realistic than a one-time rewrite
 
 - Boy Scout Rule: leave the code cleaner than you found it.
-- Once bad smells accumulate, they slow down every later change; the later you address them, the more expensive they become.
-- Real cleanliness is not produced by one cleanup pass. It comes from paying down debt during every change.
+- Once smells accumulate, they slow down all subsequent development; the later you deal with them, the higher the cost.
+- True cleanliness is not achieved in one grand tidy-up but by continuously paying down debt in every change.
 
-## Best Questions to Take Away from the Book
+## The Most Valuable Questions to Take Away
 
-- Does this name let a caller roughly understand intent without reading the implementation?
-- Does this function mix multiple abstraction levels or side effects?
-- Is this module tangled because it contains code with multiple reasons to change?
+- Does this name let a call site roughly convey intent without reading the implementation?
+- Does this function mix multiple levels of abstraction or side effects at once?
+- Is the code in this module entangled because of multiple reasons to change?
 - Is this comment adding information the code cannot express, or merely translating the code?
-- If requirements change today, do the tests give me enough safety to refactor confidently?
+- If requirements changed today, would the tests be enough to let me refactor safely?
 
-## Common Mechanical Misreadings
+## Parts Easily Misread Mechanically
 
-- “Functions should be short” should not turn into endless fragmentation.
-- “Write fewer comments” does not mean “skip contracts and intent.”
-- “Single responsibility” does not mean extracting every line into its own function; it means drawing boundaries around reasons to change.
+- "The shorter the function, the better" should not be executed as endless splitting.
+- "Write fewer comments" does not mean "write no contracts or intent."
+- "Single responsibility" is not extracting every line into its own function; it is drawing boundaries along reasons to change.
 
 ## Public Sources
 
-- O’Reilly / InformIT book overview and table-of-contents pages
-- Public descriptions of Robert C. Martin and *Clean Code*
-- The public discussion repository comparing APOSD and *Clean Code*
+- Book description and table-of-contents pages on O'Reilly / InformIT
+- Public introductions of Robert C. Martin and overviews of the "Clean Code" entry
+- The public discussion repository where John Ousterhout and Robert Martin debate APOSD vs. Clean Code
