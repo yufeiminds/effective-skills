@@ -131,7 +131,6 @@ def load_run_results(benchmark_dir: Path) -> dict:
                     "passed": grading.get("summary", {}).get("passed", 0),
                     "failed": grading.get("summary", {}).get("failed", 0),
                     "total": grading.get("summary", {}).get("total", 0),
-                    "tokens": 0,
                 }
 
                 # Extract timing — check grading.json first, then sibling timing.json
@@ -150,7 +149,8 @@ def load_run_results(benchmark_dir: Path) -> dict:
                 # Extract metrics if available
                 metrics = grading.get("execution_metrics", {})
                 result["tool_calls"] = metrics.get("total_tool_calls", 0)
-                result["output_chars"] = metrics.get("output_chars", 0)
+                if not result.get("tokens"):
+                    result["tokens"] = metrics.get("output_chars", 0)
                 result["errors"] = metrics.get("errors_encountered", 0)
 
                 # Extract expectations — viewer requires fields: text, passed, evidence
@@ -213,15 +213,12 @@ def aggregate_results(results: dict) -> dict:
 
     delta_pass_rate = primary.get("pass_rate", {}).get("mean", 0) - baseline.get("pass_rate", {}).get("mean", 0)
     delta_time = primary.get("time_seconds", {}).get("mean", 0) - baseline.get("time_seconds", {}).get("mean", 0)
-    primary_tokens = primary.get("tokens", {}).get("mean", 0)
-    baseline_tokens = baseline.get("tokens", {}).get("mean", 0)
-    delta_tokens = primary_tokens - baseline_tokens
-    tokens_unavailable = primary_tokens == 0 and baseline_tokens == 0
+    delta_tokens = primary.get("tokens", {}).get("mean", 0) - baseline.get("tokens", {}).get("mean", 0)
 
     run_summary["delta"] = {
         "pass_rate": f"{delta_pass_rate:+.2f}",
         "time_seconds": f"{delta_time:+.1f}",
-        "tokens": "n/a" if tokens_unavailable else f"{delta_tokens:+.0f}"
+        "tokens": f"{delta_tokens:+.0f}"
     }
 
     return run_summary
@@ -249,7 +246,6 @@ def generate_benchmark(benchmark_dir: Path, skill_name: str = "", skill_path: st
                     "total": result["total"],
                     "time_seconds": result["time_seconds"],
                     "tokens": result.get("tokens", 0),
-                    "output_chars": result.get("output_chars", 0),
                     "tool_calls": result.get("tool_calls", 0),
                     "errors": result.get("errors", 0)
                 },
@@ -263,13 +259,6 @@ def generate_benchmark(benchmark_dir: Path, skill_name: str = "", skill_path: st
         for config in results.values()
         for r in config
     ))
-    run_count_set = {
-        sum(1 for run in config_runs if run["eval_id"] == eval_id)
-        for config_runs in results.values()
-        for eval_id in eval_ids
-        if any(run["eval_id"] == eval_id for run in config_runs)
-    }
-    runs_per_configuration = run_count_set.pop() if len(run_count_set) == 1 else 0
 
     benchmark = {
         "metadata": {
@@ -279,13 +268,11 @@ def generate_benchmark(benchmark_dir: Path, skill_name: str = "", skill_path: st
             "analyzer_model": "<model-name>",
             "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "evals_run": eval_ids,
-            "runs_per_configuration": runs_per_configuration
+            "runs_per_configuration": 3
         },
         "runs": runs,
         "run_summary": run_summary,
-        "notes": [
-            "Token timing was unavailable from the current executor interface, so token metrics are omitted."
-        ] if run_summary.get("delta", {}).get("tokens") == "n/a" else []
+        "notes": []  # To be filled by analyzer
     }
 
     return benchmark
@@ -333,10 +320,7 @@ def generate_markdown(benchmark: dict) -> str:
     # Format tokens
     a_tokens = a_summary.get("tokens", {})
     b_tokens = b_summary.get("tokens", {})
-    if delta.get("tokens") == "n/a":
-        lines.append("| Tokens | n/a | n/a | n/a |")
-    else:
-        lines.append(f"| Tokens | {a_tokens.get('mean', 0):.0f} ± {a_tokens.get('stddev', 0):.0f} | {b_tokens.get('mean', 0):.0f} ± {b_tokens.get('stddev', 0):.0f} | {delta.get('tokens', '—')} |")
+    lines.append(f"| Tokens | {a_tokens.get('mean', 0):.0f} ± {a_tokens.get('stddev', 0):.0f} | {b_tokens.get('mean', 0):.0f} ± {b_tokens.get('stddev', 0):.0f} | {delta.get('tokens', '—')} |")
 
     # Notes section
     if benchmark.get("notes"):
