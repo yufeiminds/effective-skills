@@ -1,0 +1,26 @@
+{
+  "skill_name": "diataxis",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Our README.md mixes a quickstart tutorial with a full CLI flag reference, and users keep getting lost. Restructure our docs.",
+      "expected_output": "A type judgment first (which quadrants the content belongs to), a split into separate pages instead of accommodating the mix, per-quadrant writing rules applied, an overview-style landing page rather than lists, and an anti-pattern scan reported at the end.",
+      "expectations": [],
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Plan the docs site structure for our new API product: we have getting-started material, an API reference, a changelog, and conceptual articles. Propose a directory layout and what goes where.",
+      "expected_output": "A four-quadrant mapping (tutorials, how-to guides, reference, explanation), top-level directories organized by quadrant, lists kept to at most 7 items, and a note that reference content must be verified against the source of truth.",
+      "expectations": [],
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Our API reference describes endpoints from memory and keeps drifting from the actual code. Fix this document.",
+      "expected_output": "Each endpoint verified against the source of truth (code, type definitions, runtime behavior); rewritten in consistent reference format (description only, no instructions or evaluation); a maintenance rule recorded so future product changes trigger a re-check.",
+      "expectations": [],
+      "files": []
+    }
+  ]
+}
